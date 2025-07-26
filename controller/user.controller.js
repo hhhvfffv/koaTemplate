@@ -55,9 +55,7 @@ class UserRouteClass {
                 message: "登录成功",
                 result: {
                     token,
-                    user_name: res.user_name,
-                    user_phone: res.user_phone,
-                    isAdmin: res.isAdmin,
+                    res
                 }
             }
         } catch (e) {

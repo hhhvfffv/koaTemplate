@@ -61,5 +61,20 @@ module.exports = {
         code: '10012',
         message: '创建问题失败',
         result: ''
-    }
+    },
+    PermissionsError: {
+        code: '10013',
+        message: '没有权限',
+        result: ''
+    },
+    NOtFoundPermError: {
+        code: '10014',
+        message: '没有定义该权限',
+        result: ''
+    },
+    isQuestionNotExist: {
+        code: '10015',
+        message: '存在实际参数缺失，不存在',
+        result: ''
+    },
 }

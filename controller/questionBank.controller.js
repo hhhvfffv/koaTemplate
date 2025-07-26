@@ -1,5 +1,9 @@
 const { createQuestion } = require('../service/questionBank.service')
 const { createQuestionError } = require('../constant/err.type')
+const { Pul_fin_del_up } = require('../service/public.service')
+const QuestionsBank = require('../model/questionBank.model')
+const { Op } = require('sequelize')
+
 
 class QuestionBankController {
     /**
@@ -34,7 +38,6 @@ class QuestionBankController {
                 code: "0",
                 message: "添加题库成功",
                 result: {
-                    is: is,
                     //更具是不是一次添加多个来判断返回什么
                     question: is ? await createQuestion(topicName, applyType, qType, createid, topicDetail) : question_arr
                 }
@@ -43,6 +46,31 @@ class QuestionBankController {
             console.log(error);
 
             return ctx.app.emit('error', createQuestionError, ctx)
+        }
+    }
+
+    /**
+     * 删除题库的题目
+     */
+    async remove(ctx) {
+        const { ids } = ctx.request.body;
+
+        try {
+            //删除题库题目
+            const res = await Pul_fin_del_up({
+                a: { surface: QuestionsBank, method: "destroy", excludeArray: ["updatedAt", "createdAt"] },
+                is: false,
+                method_where: { id: { [Op.in]: ids } }
+            }
+            )
+            //返回数据
+            ctx.body = {
+                code: "0",
+                message: `删除${res}条`,
+                res
+            }
+        } catch (error) {
+
         }
     }
 }

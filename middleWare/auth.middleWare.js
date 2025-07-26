@@ -2,7 +2,8 @@ const jwt = require('jsonwebtoken')
 const { JOSN_WEB_TOKEN } = require('../config/config.default')
 const { TokenExpiredError, JsonWebTokenError, NotBeforeError } = require('../constant/err.type')
 const { getUser } = require('../service/user.service')
-const { notIsAdmain } = require('../constant/err.type')
+const { PermissionsError, NOtFoundPermError } = require('../constant/err.type')
+const { ROLES } = require('../constant/Permissions')
 
 class AuthMiddleware {
 
@@ -54,17 +55,22 @@ class AuthMiddleware {
 
     /**
      * 确认管理员权限
-     * @param {*} ctx 
-     * @param {*} next 
-     * @returns 
+      * @param {*} Pm 权限  0 学生 1 教师 在constant/Permissions.js中定义
      */
-    async isAdmain(ctx, next) {
+    havePermissions(Pm) {
+        //获取用户权限
+        !Object.values(ROLES).includes(Pm) && (() => { return ctx.app.emit('error', NOtFoundPermError, ctx) })
 
-        const { isAdmin } = await getUser({ id: ctx.state.user.id })
-        if (!isAdmin) {
-            return ctx.app.emit('error', notIsAdmain, ctx)
+        return async (ctx, next) => {
+            //查看改用户权限
+            const { roleName } = await getUser({ id: ctx.state.user.id })
+
+            //拦截权限
+            if (roleName !== Pm) {
+                return ctx.app.emit('error', PermissionsError, ctx)
+            }
+            await next()
         }
-        await next()
     }
 }
 

@@ -1,5 +1,7 @@
 # /question/create新建题库
 
+## post
+
 topicName：题干
 
 applyType：应用类型
@@ -30,3 +32,10 @@ topicDetail：题目细节（题干、选项、答案）
 
 
 
+# /question/delete删除题目
+
+## delete
+
+参数：ctx.request.body
+
+ids:[]数组【必要值】不能存在查询不了的id
