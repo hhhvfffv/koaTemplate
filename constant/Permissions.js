@@ -20,8 +20,14 @@ const SINGLE_MULTIPLE = {
  */
 const APP_TYPE = ["操作", "考试", "作业"]
 
+/**
+ * 班级
+ */
+const CLASS = ["一班", "二班", "三班", "四班", "五班", "六班", "七班", "八班", "九班", "十班"];
+
 module.exports = {
     ROLES,
     SINGLE_MULTIPLE,
-    APP_TYPE
+    APP_TYPE,
+    CLASS
 };

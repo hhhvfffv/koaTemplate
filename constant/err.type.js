@@ -77,4 +77,9 @@ module.exports = {
         message: '存在实际参数缺失，不存在',
         result: ''
     },
+    isUserNameNotExist: {
+        code: '10010',
+        message: '用户名字错误',
+        result: ''
+    },
 }

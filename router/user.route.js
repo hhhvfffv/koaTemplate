@@ -1,7 +1,11 @@
 const Router = require('koa-router');
 const { register, login, changPassword } = require('../controller/user.controller')
-const { isUserEmpty, isUserDuplicate, encryptPassword, isUserLegal, isPasswordCorrect } = require('../middleWare/user.middleWare')
+const { isUserDuplicate, encryptPassword, isUserLegal, isPasswordCorrect } = require('../middleWare/user.middleWare')
 const { getUserTokenInfo } = require('../middleWare/auth.middleWare')
+const { FieldValidation } = require('../ruterExpand/parameter.ruterExpand')
+const { ROLES } = require('../constant/Permissions');
+
+
 
 const router = new Router({ prefix: '/users' });
 
@@ -9,18 +13,32 @@ const router = new Router({ prefix: '/users' });
 /**
  * 参数 user_name, user_phone, password, roleName[可选，默认学生]
  */
-router.post('/register', isUserEmpty, isUserDuplicate, encryptPassword, register)
+router.post('/register', FieldValidation({
+    user_name: { type: 'string', required: true, allowEmpty: false },
+    user_phone: { type: 'string', required: true, allowEmpty: false, format: /\d{11}/ },
+    password: { type: 'string', required: true, allowEmpty: false },
+    roleName: { type: 'enum', values: Object.values(ROLES), required: false, default: ROLES.STUDENT }
+}), isUserDuplicate, encryptPassword, register)
 
 //登录
 /**
- * 参数 user_phone  password
+ * 参数 user_name user_phone  password
  */
-router.post('/login', isUserEmpty, isUserLegal, isPasswordCorrect, login)
+router.post('/login', FieldValidation({
+    user_name: { type: 'string', required: true, allowEmpty: false },
+    user_phone: { type: 'string', required: true, allowEmpty: false, format: /\d{11}/ },
+    password: { type: 'string', required: true, allowEmpty: false, min: 6, max: 6 }
+}), isUserLegal, isPasswordCorrect, login)
 
 //修改密码
 /**
  *参数 user_name  password  newPassword
  */
-router.patch('/password', getUserTokenInfo, isPasswordCorrect, encryptPassword, changPassword)
+router.patch('/password', FieldValidation({
+    user_name: { type: 'string', required: true, allowEmpty: false },
+    password: { type: 'string', required: true, allowEmpty: false, min: 6, max: 6 },
+    newPassword: { type: 'string', required: true, allowEmpty: false, min: 6, max: 6 }
+}), getUserTokenInfo, isPasswordCorrect, encryptPassword, changPassword)
+
 
 module.exports = router

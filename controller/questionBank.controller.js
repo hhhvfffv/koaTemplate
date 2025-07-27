@@ -36,7 +36,7 @@ class QuestionBankController {
             //返回数据
             ctx.body = {
                 code: "0",
-                message: "添加题库成功",
+                message: "添加题库了",
                 result: {
                     //更具是不是一次添加多个来判断返回什么
                     question: is ? await createQuestion(topicName, applyType, qType, createid, topicDetail) : question_arr

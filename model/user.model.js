@@ -1,6 +1,6 @@
 const { DataTypes } = require('sequelize');
 const seq = require('../db/seq');
-const { ROLES } = require('../constant/Permissions');
+const { ROLES, CLASS } = require('../constant/Permissions');
 
 const User = seq.define('ai_users', {
     user_phone: {
@@ -37,7 +37,7 @@ const User = seq.define('ai_users', {
             // 限制角色值必须在预定义的角色枚举中（防止无效值）
             isIn: {
                 args: [Object.values(ROLES)],
-                msg: `角色值无效，允许的值：${Object.values(ROLES).join(', ')}`
+                msg: `角色值无效，允许的值：${Object.values(ROLES).join(', ')}等`
             }
         }
     }
