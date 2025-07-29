@@ -1,4 +1,4 @@
-const QuestionsBank = require('../model/questionBank.model');
+const QuestionsBank = require('../../model/questionBank.model');
 
 class QuestionBankService {
     /**

@@ -11,8 +11,9 @@ const ROLES = {
  * 单选多选
  */
 const SINGLE_MULTIPLE = {
-    SINGLE: false,    // 单选
-    MULTIPLE: true,   // 多选
+    SINGLE: 0,    // 单选
+    MULTIPLE: 1,   // 多选
+    JUDGE: 2,      // 判断题
 };
 
 /**

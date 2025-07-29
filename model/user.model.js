@@ -40,6 +40,11 @@ const User = seq.define('ai_users', {
                 msg: `角色值无效，允许的值：${Object.values(ROLES).join(', ')}等`
             }
         }
+    },
+    class_name: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        comment: `` + `班级（枚举值）：${CLASS.join(',')}等`,
     }
 },
     {

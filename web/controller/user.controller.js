@@ -1,9 +1,9 @@
 const { createUser } = require('../service/user.service')
 const jwt = require('jsonwebtoken')
-const { isDataSlectError } = require('../constant/err.type')
-const { JOSN_WEB_TOKEN, JOSN_DATA } = require('../config/config.default')
+const { isDataSlectError } = require('../../constant/err.type')
+const { JOSN_WEB_TOKEN, JOSN_DATA } = require('../../config/config.default')
 const { getUser, updateUser } = require('../service/user.service')
-const { ROLES } = require('../constant/Permissions')
+const { ROLES } = require('../../constant/Permissions')
 
 class UserRouteClass {
 
@@ -14,18 +14,13 @@ class UserRouteClass {
      * @returns 
      */
     async register(ctx) {
-        const { user_name, password, user_phone, roleName = ROLES.STUDENT } = ctx.request.body
+        const { user_name, password, user_phone, class_name, roleName = ROLES.STUDENT } = ctx.request.body
         try {
-            const res = await createUser({ user_name, user_phone, password, roleName })
+            const res = await createUser({ user_name, user_phone, password, class_name, roleName })
             ctx.body = {
                 code: "0",
                 message: "注册成功",
-                result: {
-                    id: res.id,
-                    user_name: res.user_name,
-                    user_phone: res.user_phone,
-                    roleName: res.roleName,
-                }
+                result: res
             }
 
         } catch (e) {

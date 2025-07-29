@@ -1,10 +1,10 @@
-const User = require('../model/user.model')
-const { ROLES } = require('../constant/Permissions')
+const User = require('../../model/user.model')
+const { ROLES } = require('../../constant/Permissions')
 
 // 1.创建用户
-const createUser = async ({ user_name, user_phone, password, roleName = ROLES.STUDENT }) => {
+const createUser = async ({ user_name, user_phone, class_name, password, roleName = ROLES.STUDENT }) => {
     try {
-        const res = await User.create({ user_name, user_phone, password, roleName })
+        const res = await User.create({ user_name, user_phone, password, class_name, roleName })
         return res.dataValues
     } catch (err) {
         console.error(err)
@@ -13,13 +13,14 @@ const createUser = async ({ user_name, user_phone, password, roleName = ROLES.ST
 }
 
 //2.用户查询
-const getUser = async ({ user_name, user_phone, id, roleName, createAt, updatedAt }) => {
+const getUser = async ({ user_name, user_phone, id, class_name, roleName, createAt, updatedAt }) => {
     const where = {}
 
     //条件加入
     user_name ? Object.assign(where, { user_name }) : null
     user_phone ? Object.assign(where, { user_phone }) : null
     id ? Object.assign(where, { id }) : null
+    class_name ? Object.assign(where, { class_name }) : null
     roleName ? Object.assign(where, { roleName }) : null
     createAt ? Object.assign(where, { createAt }) : null
     updatedAt ? Object.assign(where, { updatedAt }) : null
@@ -27,7 +28,6 @@ const getUser = async ({ user_name, user_phone, id, roleName, createAt, updatedA
     //查询
     try {
         const res = await User.findOne({
-            attributes: ['id', 'user_name', 'user_phone', 'password', 'roleName', 'createdAt', 'updatedAt'],
             where: where
         })
         return res ? res.dataValues : null

@@ -1,4 +1,4 @@
-const { ParameterCartError } = require("../constant/err.type");
+const { ParameterCartError } = require("../../constant/err.type");
 
 class ParameterExpand {
     /**

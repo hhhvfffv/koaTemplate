@@ -1,9 +1,8 @@
 const jwt = require('jsonwebtoken')
-const { JOSN_WEB_TOKEN } = require('../config/config.default')
-const { TokenExpiredError, JsonWebTokenError, NotBeforeError } = require('../constant/err.type')
+const { JOSN_WEB_TOKEN } = require('../../config/config.default')
+const { TokenExpiredError, JsonWebTokenError, NotBeforeError, PermissionsError, NOtFoundPermError } = require('../../constant/err.type')
 const { getUser } = require('../service/user.service')
-const { PermissionsError, NOtFoundPermError } = require('../constant/err.type')
-const { ROLES } = require('../constant/Permissions')
+const { ROLES } = require('../../constant/Permissions')
 
 class AuthMiddleware {
 
@@ -54,7 +53,7 @@ class AuthMiddleware {
     }
 
     /**
-     * 确认管理员权限
+     * 确认管理员权限 需要tokrn中间件
       * @param {*} Pm 权限  0 学生 1 教师 在constant/Permissions.js中定义
      */
     havePermissions(Pm) {

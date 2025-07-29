@@ -19,10 +19,10 @@ const QuestionsBank = seq.define('ai_questions_bank', {
     },
     // 题目类型
     qType: {
-        type: DataTypes.BOOLEAN,
+        type: DataTypes.INTEGER,
         allowNull: false, // 必要字段，不可为null
         defaultValue: SINGLE_MULTIPLE.SINGLE, // 默认单选
-        comment: '题目类型0单选1多选',
+        comment: '题目类型0单选1多选2判断',
     },
     // 创建者
     createid: {
@@ -39,6 +39,7 @@ const QuestionsBank = seq.define('ai_questions_bank', {
     }
 },
     {
+        timezone: '+08:00', // 明确设置为东八区
         freezeTableName: true,
     }
 )

@@ -3,7 +3,7 @@ const { register, login, changPassword } = require('../controller/user.controlle
 const { isUserDuplicate, encryptPassword, isUserLegal, isPasswordCorrect } = require('../middleWare/user.middleWare')
 const { getUserTokenInfo } = require('../middleWare/auth.middleWare')
 const { FieldValidation } = require('../ruterExpand/parameter.ruterExpand')
-const { ROLES } = require('../constant/Permissions');
+const { ROLES, CLASS } = require('../../constant/Permissions');
 
 
 
@@ -11,12 +11,13 @@ const router = new Router({ prefix: '/users' });
 
 //注册
 /**
- * 参数 user_name, user_phone, password, roleName[可选，默认学生]
+ * 参数 user_name, user_phone, password,class_name，roleName[可选，默认学生]
  */
 router.post('/register', FieldValidation({
     user_name: { type: 'string', required: true, allowEmpty: false },
     user_phone: { type: 'string', required: true, allowEmpty: false, format: /\d{11}/ },
     password: { type: 'string', required: true, allowEmpty: false },
+    class_name: { type: 'enum', values: CLASS, required: true, },
     roleName: { type: 'enum', values: Object.values(ROLES), required: false, default: ROLES.STUDENT }
 }), isUserDuplicate, encryptPassword, register)
 
@@ -35,7 +36,7 @@ router.post('/login', FieldValidation({
  *参数 user_name  password  newPassword
  */
 router.patch('/password', FieldValidation({
-    user_name: { type: 'string', required: true, allowEmpty: false },
+    user_phone: { type: 'string', required: true, allowEmpty: false, format: /\d{11}/ },
     password: { type: 'string', required: true, allowEmpty: false, min: 6, max: 6 },
     newPassword: { type: 'string', required: true, allowEmpty: false, min: 6, max: 6 }
 }), getUserTokenInfo, isPasswordCorrect, encryptPassword, changPassword)

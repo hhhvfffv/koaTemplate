@@ -1,4 +1,4 @@
-const { isUserRepeat, isUserHaveNull, isUserNameNotExist, userRegisterError, isUserNotExist, isDataSlectError, isPasswordError, passwordFormatisincorrect } = require('../constant/err.type')
+const { isUserRepeat, userRegisterError, isUserNotExist, isDataSlectError, isPasswordError } = require('../../constant/err.type')
 const { getUser } = require('../service/user.service')
 const bcrypt = require('bcryptjs')
 
@@ -12,11 +12,6 @@ const isUserDuplicate = async (ctx, next) => {
         if (await getUser({ user_phone })) {
             ctx.body = "用户名已存在"
             ctx.app.emit('error', isUserRepeat, ctx)
-            return
-        }
-
-        if ((await getUser({ user_phone }).user_name !== user_name)) {
-            ctx.app.emit('error', isUserNameNotExist, ctx)
             return
         }
     } catch (err) {
@@ -68,16 +63,12 @@ const encryptPassword = async (ctx, next) => {
  */
 const isUserLegal = async (ctx, next) => {
     //1.获得数据
-    const { user_phone, user_name } = ctx.request.body;
+    const { user_phone } = ctx.request.body;
+    const res = await getUser({ user_phone });
     //2.查找用户是否存在
     try {
-        const res = await getUser({ user_phone })
         if (!res) {
             ctx.app.emit('error', isUserNotExist, ctx)
-            return
-        }
-        if ((res).user_name !== user_name) {
-            ctx.app.emit('error', isUserNameNotExist, ctx)
             return
         }
     } catch (err) {
@@ -103,6 +94,12 @@ const isPasswordCorrect = async (ctx, next) => {
         const { password, user_phone } = ctx.request.body;
         //2.获得数据库用户信息  
         const User_infomation = await getUser({ user_phone });
+
+        if (!User_infomation) {
+            ctx.app.emit('error', isUserNotExist, ctx)
+            return
+        }
+
         console.log(User_infomation.password);
         console.log(password);
 

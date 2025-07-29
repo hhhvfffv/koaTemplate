@@ -2,7 +2,7 @@ const Router = require('koa-router');
 const { getUserTokenInfo, havePermissions } = require('../middleWare/auth.middleWare')
 const { create } = require('../controller/questionBank.controller')
 const { FieldValidation } = require('../ruterExpand/parameter.ruterExpand')
-const { SINGLE_MULTIPLE, ROLES, APP_TYPE } = require('../constant/Permissions');
+const { SINGLE_MULTIPLE, ROLES, APP_TYPE } = require('../../constant/Permissions');
 const { findQuestionId } = require('../middleWare/questionBank.middleWare')
 const { remove } = require('../controller/questionBank.controller')
 

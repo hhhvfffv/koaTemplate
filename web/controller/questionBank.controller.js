@@ -1,7 +1,7 @@
 const { createQuestion } = require('../service/questionBank.service')
-const { createQuestionError } = require('../constant/err.type')
-const { Pul_fin_del_up } = require('../service/public.service')
-const QuestionsBank = require('../model/questionBank.model')
+const { createQuestionError } = require('../../constant/err.type')
+const { Pul_fin_del_up } = require('../../service/public.service')
+const QuestionsBank = require('../../model/questionBank.model')
 const { Op } = require('sequelize')
 
 

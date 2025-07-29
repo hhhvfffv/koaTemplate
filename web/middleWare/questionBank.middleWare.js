@@ -1,7 +1,7 @@
-const { Pul_fin_del_up } = require('../service/public.service')
-const { Op, } = require('sequelize');
-const QuestionsBank = require('../model/questionBank.model');
-const { isQuestionNotExist } = require('../constant/err.type');
+const { Pul_fin_del_up } = require('../../service/public.service')
+const { Op } = require('sequelize');
+const QuestionsBank = require('../../model/questionBank.model');
+const { isQuestionNotExist } = require('../../constant/err.type');
 
 
 class QuestionBankMiddleware {
