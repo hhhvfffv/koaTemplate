@@ -1,11 +1,14 @@
 const User = require('../../model/user.model')
 const { ROLES } = require('../../constant/Permissions')
+const { resTime } = require('../../tool/Time.Conversion')//引入时间转换工具
 
 // 1.创建用户
 const createUser = async ({ user_name, user_phone, class_name, password, roleName = ROLES.STUDENT }) => {
     try {
         const res = await User.create({ user_name, user_phone, password, class_name, roleName })
-        return res.dataValues
+
+        //时间转换
+        return await resTime(res.dataValues)
     } catch (err) {
         console.error(err)
         console.error('添加用户失败');

@@ -60,7 +60,7 @@ const User = seq.define('ai_users', {
 // } catch (err) {
 //     console.log("err");
 // }
-console.log("链接成功user");
+// console.log("链接成功user");
 
 
 //暴露
