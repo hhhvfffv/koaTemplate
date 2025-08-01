@@ -22,7 +22,7 @@ class QuestionBankMiddleware {
 
             // 如果查询结果长度小于ids长度，返回错误
             if (res.length < ids.length) {
-                return ctx.app.emit('error', isQuestionNotExist, ctx);
+                return ctx.app.emit('error_s', isQuestionNotExist, ctx);
             }
 
             await next()

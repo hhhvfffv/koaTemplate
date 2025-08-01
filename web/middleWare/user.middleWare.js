@@ -10,13 +10,12 @@ const isUserDuplicate = async (ctx, next) => {
     // 数据库查询用户是否存在
     try {
         if (await getUser({ user_phone })) {
-            ctx.body = "用户名已存在"
-            ctx.app.emit('error', isUserRepeat, ctx)
+            ctx.app.emit('error_s', isUserRepeat, ctx)
             return
         }
     } catch (err) {
         console.error(err);
-        ctx.app.emit('error', userRegisterError, ctx)
+        ctx.app.emit('error_s', userRegisterError, ctx)
         return
     }
     await next()
@@ -50,7 +49,7 @@ const encryptPassword = async (ctx, next) => {
 
     } catch (err) {
         console.error(err);
-        return ctx.app.emit('error', userRegisterError, ctx)
+        return ctx.app.emit('error_s', userRegisterError, ctx)
     }
     await next()
 }
@@ -68,12 +67,12 @@ const isUserLegal = async (ctx, next) => {
     //2.查找用户是否存在
     try {
         if (!res) {
-            ctx.app.emit('error', isUserNotExist, ctx)
+            ctx.app.emit('error_s', isUserNotExist, ctx)
             return
         }
     } catch (err) {
         console.error(err);
-        ctx.app.emit('error', isDataSlectError, ctx)
+        ctx.app.emit('error_s', isDataSlectError, ctx)
         return
     }
 
@@ -96,7 +95,7 @@ const isPasswordCorrect = async (ctx, next) => {
         const User_infomation = await getUser({ user_phone });
 
         if (!User_infomation) {
-            ctx.app.emit('error', isUserNotExist, ctx)
+            ctx.app.emit('error_s', isUserNotExist, ctx)
             return
         }
 
@@ -106,13 +105,13 @@ const isPasswordCorrect = async (ctx, next) => {
 
         //3.解密
         if (!bcrypt.compareSync(password, User_infomation.password)) {
-            ctx.app.emit('error', isPasswordError, ctx)
+            ctx.app.emit('error_s', isPasswordError, ctx)
             console.log(bcrypt.compareSync(password, User_infomation.password));
             return
         }
     } catch (err) {
         console.error(err);
-        ctx.app.emit('error', isDataSlectError, ctx)
+        ctx.app.emit('error_s', isDataSlectError, ctx)
         return
     }
 
@@ -127,5 +126,4 @@ module.exports = {
     encryptPassword,//3.用户密码加密
     isUserLegal,    //4.用户合法性验证
     isPasswordCorrect //5.密码验证
-
 }

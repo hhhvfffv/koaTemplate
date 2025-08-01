@@ -8,17 +8,21 @@ class UploadController {
         //判断是否为数组
         if (file instanceof Array) {
             ctx.body = {
-                code: 0,
-                message: '上传成功',
-                reslut: {
-                    img_url: file.map(item => item.newFilename)
+                data: {
+                    code: 0,
+                    success: '上传成功',
+                    data: {
+                        img_url: file.map(item => item.newFilename)
+                    }
                 }
             }
         } else {
             ctx.body = {
-                code: 0,
-                message: '上传成功',
-                reslut: file.newFilename
+                data: {
+                    code: 0,
+                    success: '上传成功',
+                    data: file.newFilename
+                }
             }
         }
     }

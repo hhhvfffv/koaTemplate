@@ -35,17 +35,19 @@ class QuestionBankController {
         try {
             //返回数据
             ctx.body = {
-                code: "0",
-                message: "添加题库了",
-                result: {
-                    //更具是不是一次添加多个来判断返回什么
-                    question: is ? await createQuestion(topicName, applyType, qType, createid, topicDetail) : question_arr
+                data: {
+                    code: "0",
+                    success: "添加题库了",
+                    data: {
+                        //更具是不是一次添加多个来判断返回什么
+                        question: is ? await createQuestion(topicName, applyType, qType, createid, topicDetail) : question_arr
+                    }
                 }
             }
         } catch (error) {
             console.log(error);
 
-            return ctx.app.emit('error', createQuestionError, ctx)
+            return ctx.app.emit('error_s', createQuestionError, ctx)
         }
     }
 
@@ -65,9 +67,11 @@ class QuestionBankController {
             )
             //返回数据
             ctx.body = {
-                code: "0",
-                message: `删除${res}条`,
-                res
+                data: {
+                    code: "0",
+                    message: `删除${res}条`,
+                    data: res
+                }
             }
         } catch (error) {
 

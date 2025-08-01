@@ -27,20 +27,22 @@ class AuthMiddleware {
             console.error(err);
             switch (err.name) {
                 case 'TokenExpiredError':
-                    ctx.app.emit('error', TokenExpiredError, ctx)
+                    ctx.app.emit('error_s', TokenExpiredError, ctx)
                     break;
                 case 'JsonWebTokenError':
-                    ctx.app.emit('error', JsonWebTokenError, ctx)
+                    ctx.app.emit('error_s', JsonWebTokenError, ctx)
                     break;
                 case 'NotBeforeError':
-                    ctx.app.emit('error', NotBeforeError, ctx)
+                    ctx.app.emit('error_s', NotBeforeError, ctx)
                     break;
                 default:
                     ctx.body = {
-                        code: 4,
-                        message: '出现未捕获错误',
-                        result: {
-                            err: "去厮后端吧"
+                        data: {
+                            code: 4,
+                            message: 'token中间件出现未捕获错误',
+                            data: {
+                                err: "去厮后端吧"
+                            }
                         }
                     }
                     break;
@@ -58,7 +60,7 @@ class AuthMiddleware {
      */
     havePermissions(Pm) {
         //获取用户权限
-        !Object.values(ROLES).includes(Pm) && (() => { return ctx.app.emit('error', NOtFoundPermError, ctx) })
+        !Object.values(ROLES).includes(Pm) && (() => { return ctx.app.emit('error_s', NOtFoundPermError, ctx) })
 
         return async (ctx, next) => {
             //查看改用户权限
@@ -66,7 +68,7 @@ class AuthMiddleware {
 
             //拦截权限
             if (roleName !== Pm) {
-                return ctx.app.emit('error', PermissionsError, ctx)
+                return ctx.app.emit('error_s', PermissionsError, ctx)
             }
             await next()
         }

@@ -22,9 +22,8 @@ class ParameterExpand {
                     ctx.verifyParams(rules);
                 }
             } catch (error) {
-                console.error(error);
-                ParameterCartError.result = error
-                return ctx.app.emit('error', ParameterCartError, ctx)
+                ParameterCartError.data.data = error
+                return ctx.app.emit('error_s', ParameterCartError, ctx)
             }
             await next()
         }

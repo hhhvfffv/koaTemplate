@@ -18,9 +18,11 @@ class UserRouteClass {
         try {
             const res = await createUser({ user_name, user_phone, password, class_name, roleName })
             ctx.body = {
-                code: "0",
-                message: "注册成功",
-                result: res
+                data: {
+                    code: "0",
+                    success: "注册成功",
+                    data: res
+                }
             }
 
         } catch (e) {
@@ -46,16 +48,18 @@ class UserRouteClass {
             token = jwt.sign(res, JOSN_WEB_TOKEN, { expiresIn: JOSN_DATA })
             //返回数据
             ctx.body = {
-                code: "0",
-                message: "登录成功",
-                result: {
-                    token,
-                    res
+                data: {
+                    code: "0",
+                    success: "登录成功",
+                    data: {
+                        token,
+                        res
+                    }
                 }
             }
         } catch (e) {
             console.error(e, "操作数据库错误或者token生成错误");
-            ctx.app.emit('error', isDataSlectError, ctx)
+            ctx.app.emit('error_s', isDataSlectError, ctx)
             return
         }
 
@@ -79,13 +83,16 @@ class UserRouteClass {
             await updateUser({ id, password })
         } catch (error) {
             console.error(error);
-            ctx.app.emit('error', isDataSlectError, ctx)
+            ctx.app.emit('error_s', isDataSlectError, ctx)
             return
         }
 
         ctx.body = {
-            code: "0",
-            message: "修改密码成功",
+            data: {
+                code: "0",
+                message: "修改密码成功",
+                data: {}
+            }
         }
     }
 }

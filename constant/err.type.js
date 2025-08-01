@@ -1,85 +1,117 @@
 module.exports = {
     ParameterCartError: {
-        code: "10002",
-        message: "参数错误",
-        reslut: ''
+        data: {
+            code: "10002",
+            message: "参数错误",
+            data: ''
+        }
     },
     isDataSlectError: {
-        code: '10005',
-        message: '数据查询失败',
-        result: ''
+        data: {
+            code: '10005',
+            message: '数据查询失败',
+            data: ''
+        }
     },
     isUserRepeat: {
-        code: "10002",
-        message: "用户账户已存在",
-        result: ""
+        data: {
+            code: "10002",
+            message: "用户账户已存在",
+            data: ""
+        }
     },
     isUserHaveNull: {
-        code: "10001",
-        message: "用户账户输入用户名或密码有空值",
-        result: ""
+        data: {
+            code: "10001",
+            message: "用户账户输入用户名或密码有空值",
+            data: ""
+        }
     },
     passwordFormatisincorrect: {
-        code: "10007",
-        message: "密码格式不正确",
-        result: ""
+        data: {
+            code: "10007",
+            message: "密码格式不正确",
+            data: ""
+        }
     },
     userRegisterError: {
-        code: '10003',
-        message: '服务器的土豆服务器or土豆mysql出现异常，或者不小心大了一堆符号',
-        result: ''
+        data: {
+            code: '10003',
+            message: '服务器的土豆服务器or土豆mysql出现异常，或者不小心大了一堆符号',
+            data: ''
+        }
     },
 
     TokenExpiredError: {
-        code: '10007',
-        message: 'token过期',
-        result: ''
+        data: {
+            code: '10007',
+            message: 'token过期',
+            data: ''
+        }
     },
 
     JsonWebTokenError: {
-        code: '10008',
-        message: 'token无效',
-        result: ''
+        data: {
+            code: '10008',
+            message: 'token无效',
+            data: ''
+        }
     },
 
     NotBeforeError: {
-        code: '10009',
-        message: 'token还未激活',
-        result: ''
+        data: {
+            code: '10009',
+            message: 'token还未激活',
+            data: ''
+        }
     },
     isUserNotExist: {
-        code: '10010',
-        message: '用户账户不存在',
-        result: ''
+        data: {
+            code: '10010',
+            message: '用户账户不存在',
+            data: ''
+        }
     },
     isPasswordError: {
-        code: '10011',
-        message: '密码错误',
-        result: ''
+        data: {
+            code: '10011',
+            message: '密码错误',
+            data: ''
+        }
     },
     createQuestionError: {
-        code: '10012',
-        message: '创建问题失败',
-        result: ''
+        data: {
+            code: '10012',
+            message: '创建问题失败',
+            data: ''
+        }
     },
     PermissionsError: {
-        code: '10013',
-        message: '没有权限',
-        result: ''
+        data: {
+            code: '10013',
+            message: '没有权限',
+            data: ''
+        }
     },
     NOtFoundPermError: {
-        code: '10014',
-        message: '没有定义该权限',
-        result: ''
+        data: {
+            code: '10014',
+            message: '没有定义该权限',
+            data: ''
+        }
     },
     isQuestionNotExist: {
-        code: '10015',
-        message: '存在实际参数缺失，不存在',
-        result: ''
+        data: {
+            code: '10015',
+            message: '存在实际参数缺失，不存在',
+            data: ''
+        }
     },
     isUserNameNotExist: {
-        code: '10010',
-        message: '用户名字错误',
-        result: ''
+        data: {
+            code: '10010',
+            message: '用户名字错误',
+            data: ''
+        }
     },
 }
