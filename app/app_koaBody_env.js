@@ -13,7 +13,7 @@ const app_koaBody_env = async (app, koaBody) => {
                     onFileBegin: (name, file) => {//文件上传过滤
                         console.log("开始上传文件");
                         //定义可以上传文件的类型
-                        const rightFileType = ['.jpg', '.png', '.gif', '.jpeg']
+                        const rightFileType = ['.jpg', '.png', '.gif', '.docx', '.jpeg']
                         //获取文件的扩展名
                         const extname = path.extname(file.newFilename).toLocaleLowerCase()
 

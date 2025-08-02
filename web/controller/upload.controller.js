@@ -1,3 +1,8 @@
+const path = require('path')
+const { analyzeWord } = require('../../tool/util')
+const dotenv = require('../..//config/config.default');//利用npm install dotenv --save 来读全局配置文件
+const { isExtnameERROR } = require('../../constant/err.type')
+
 class UploadController {
     async upload(ctx) {
         /**
@@ -25,6 +30,30 @@ class UploadController {
                 }
             }
         }
+    }
+
+    /**
+     * 
+     */
+    async parse(ctx) {
+        const file = ctx.request.files.file.newFilename
+        //刚刚上传的，文件路径
+        const path_s = path.join(__dirname, '../../upload', file)
+
+        if (!(path.extname(path_s) === '.docx')) {
+            return ctx.app.emit('error_s', isExtnameERROR, ctx)
+        }
+
+        //解析word文件 返回数组
+        const hrml_doc = await analyzeWord(path_s, dotenv.LOCALHOST_URL)
+        ctx.body = {
+            data: {
+                code: 0,
+                success: '上传成功',
+                data: hrml_doc
+            }
+        }
+
     }
 }
 

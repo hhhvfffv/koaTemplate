@@ -114,4 +114,11 @@ module.exports = {
             data: ''
         }
     },
+    isExtnameERROR: {
+        data: {
+            code: '10016',
+            message: '文件扩展名错误,只支持docx的文档',
+            data: ''
+        }
+    }
 }

@@ -15,7 +15,7 @@ const router = new Router({ prefix: '/users' });
  */
 router.post('/register', FieldValidation({
     user_name: { type: 'string', required: true, allowEmpty: false },
-    user_phone: { type: 'string', required: true, allowEmpty: false, format: /\d{11}/ },
+    user_phone: { type: 'string', required: true, allowEmpty: false, format: /^1[3-9]\d{9}$/ },
     password: { type: 'string', required: true, allowEmpty: false },
     class_name: { type: 'enum', values: CLASS, required: true, },
     roleName: { type: 'enum', values: Object.values(ROLES), required: false, default: ROLES.STUDENT }
@@ -27,7 +27,7 @@ router.post('/register', FieldValidation({
  */
 router.post('/login', FieldValidation({
     user_name: { type: 'string', required: true, allowEmpty: false },
-    user_phone: { type: 'string', required: true, allowEmpty: false, format: /\d{11}/ },
+    user_phone: { type: 'string', required: true, allowEmpty: false, format: /^1[3-9]\d{9}$/ },
     password: { type: 'string', required: true, allowEmpty: false, min: 6, max: 6 }
 }), isUserLegal, isPasswordCorrect, login)
 
@@ -36,7 +36,7 @@ router.post('/login', FieldValidation({
  *参数 user_name  password  newPassword
  */
 router.patch('/password', FieldValidation({
-    user_phone: { type: 'string', required: true, allowEmpty: false, format: /\d{11}/ },
+    user_phone: { type: 'string', required: true, allowEmpty: false, format: /^1[3-9]\d{9}$/ },
     password: { type: 'string', required: true, allowEmpty: false, min: 6, max: 6 },
     newPassword: { type: 'string', required: true, allowEmpty: false, min: 6, max: 6 }
 }), getUserTokenInfo, isPasswordCorrect, encryptPassword, changPassword)
