@@ -1,5 +1,1 @@
-# 如果没有.gitignore，先创建
-echo "node_modules/" >> .gitignore
-
-# 已存在则直接添加（避免重复）
-echo "node_modules/" >> .gitignore
+node_modules/
