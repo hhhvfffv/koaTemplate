@@ -1,7 +1,10 @@
 const jwt = require('jsonwebtoken')
 const { JOSN_WEB_TOKEN } = require('../../config/config.default')
-const { TokenExpiredError, JsonWebTokenError, NotBeforeError, PermissionsError, NOtFoundPermError } = require('../../constant/err.type')
+const { TokenExpiredError, JsonWebTokenError, NotBeforeError, isAllError, PermissionsError, NOtFoundPermError } = require('../../constant/err.type')
 const { getUser } = require('../service/user.service')
+const { Pul_findOne } = require('../../service/public.service')
+const User = require('../../model/user.model')
+const Teacher = require('../../model/teacher.model')
 const { ROLES } = require('../../constant/Permissions')
 
 class AuthMiddleware {
@@ -64,7 +67,18 @@ class AuthMiddleware {
 
         return async (ctx, next) => {
             //查看改用户权限
-            const { roleName } = await getUser({ id: ctx.state.user.id })
+            let roleName
+
+            let res1 = await Pul_findOne({ surface: Teacher, WhereOpj: { user_phone: ctx.state.user.user_phone } })
+            let res2 = await Pul_findOne({ surface: User, WhereOpj: { user_phone: ctx.state.user.user_phone } })
+
+            if (res1 && res2) { return (ctx.app.emit('error_s', isAllError, ctx)) }
+
+
+            res1 && (roleName = ROLES.TEACHER)
+            res2 && (roleName = ROLES.STUDENT)
+
+
 
             //拦截权限
             if (roleName !== Pm) {

@@ -1,15 +1,21 @@
 const { isUserRepeat, userRegisterError, isUserNotExist, isDataSlectError, isPasswordError } = require('../../constant/err.type')
 const { getUser } = require('../service/user.service')
+const { Pul_findOne } = require('../../service/public.service')
+const User = require('../../model/user.model')
+const Teacher = require('../../model/teacher.model')
+const { ROLES } = require('../../constant/Permissions')
 const bcrypt = require('bcryptjs')
 
 /**userRegisterError
  * 2.查重->查询用户是否存在
  */
 const isUserDuplicate = async (ctx, next) => {
-    const { user_phone } = ctx.request.body;
+    const { user_phone, roleName } = ctx.request.body;
     // 数据库查询用户是否存在
     try {
-        if (await getUser({ user_phone })) {
+        // 两个表任意一个存在都不行
+        if ((await Pul_findOne({ surface: Teacher, WhereOpj: { user_phone } }))
+            || (await Pul_findOne({ surface: User, WhereOpj: { user_phone } }))) {
             ctx.app.emit('error_s', isUserRepeat, ctx)
             return
         }
@@ -63,9 +69,15 @@ const encryptPassword = async (ctx, next) => {
 const isUserLegal = async (ctx, next) => {
     //1.获得数据
     const { user_phone } = ctx.request.body;
-    const res = await getUser({ user_phone });
     //2.查找用户是否存在
     try {
+        let res
+        let res1 = await Pul_findOne({ surface: Teacher, WhereOpj: { user_phone } })
+        let res2 = await Pul_findOne({ surface: User, WhereOpj: { user_phone } })
+
+
+        res1 ? res = res1 : res = res2
+
         if (!res) {
             ctx.app.emit('error_s', isUserNotExist, ctx)
             return
@@ -91,8 +103,21 @@ const isPasswordCorrect = async (ctx, next) => {
     try {
         //1.获得数据
         const { password, user_phone } = ctx.request.body;
+        const { roleName } = ctx.state //只有登录用户查重才有
         //2.获得数据库用户信息  
-        const User_infomation = await getUser({ user_phone });
+        let User_infomation
+
+        //判断是哪个表的
+        switch (roleName) {
+            case ROLES.TEACHER: {
+                User_infomation = await Pul_findOne({ surface: Teacher, WhereOpj: { user_phone } })
+                break
+            }
+            case ROLES.STUDENT: {
+                User_infomation = await Pul_findOne({ surface: User, WhereOpj: { user_phone } })
+                break
+            }
+        }
 
         if (!User_infomation) {
             ctx.app.emit('error_s', isUserNotExist, ctx)
@@ -119,11 +144,35 @@ const isPasswordCorrect = async (ctx, next) => {
     await next()
 }
 
+/**
+ * 用户角色判断，会把对应角色挂载到ctx.state.roleName上
+ * 需要user_phone参数  body参数
+ * @param {*} ctx 
+ * @param {*} next 
+ * @returns 
+ */
+const isRoleName = async (ctx, next) => {
+    const { user_phone } = ctx.request.body;
+
+    try {
+        let res1 = await Pul_findOne({ surface: Teacher, WhereOpj: { user_phone } })
+        let res2 = await Pul_findOne({ surface: User, WhereOpj: { user_phone } })
+
+        res1 ? ctx.state.roleName = ROLES.TEACHER : ""
+        res2 ? ctx.state.roleName = ROLES.STUDENT : ""
+        await next()
+    } catch (error) {
+        console.error(err);
+        ctx.app.emit('error_s', isDataSlectError, ctx)
+        return
+    }
+}
 
 
 module.exports = {
     isUserDuplicate,// 验证用户是否重复
     encryptPassword,//3.用户密码加密
     isUserLegal,    //4.用户合法性验证
-    isPasswordCorrect //5.密码验证
+    isPasswordCorrect, //5.密码验证
+    isRoleName, //6.角色判断
 }

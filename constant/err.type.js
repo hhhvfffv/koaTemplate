@@ -120,5 +120,40 @@ module.exports = {
             message: '文件扩展名错误,只支持docx的文档',
             data: ''
         }
+    },
+    updateQuestionError: {
+        data: {
+            code: '10017',
+            message: '更新问题失败',
+            data: ''
+        }
+    },
+    deleteQuestionError: {
+        data: {
+            code: '10018',
+            message: '删除问题失败',
+            data: ''
+        }
+    },
+    isAllError: {
+        data: {
+            code: '10019',
+            message: '怎么张表都有一个用户',
+            data: ''
+        }
+    },
+    isQuestionLIstError: {
+        data: {
+            code: '10020',
+            message: '问题列表获取失败',
+            data: ''
+        }
+    },
+    isGetTotalError: {
+        data: {
+            code: '10021',
+            message: '获取总数失败',
+            data: ''
+        }
     }
 }

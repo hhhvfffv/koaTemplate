@@ -1,6 +1,6 @@
 const Router = require('koa-router');
 const { register, login, changPassword } = require('../controller/user.controller')
-const { isUserDuplicate, encryptPassword, isUserLegal, isPasswordCorrect } = require('../middleWare/user.middleWare')
+const { isUserDuplicate, encryptPassword, isRoleName, isUserLegal, isPasswordCorrect } = require('../middleWare/user.middleWare')
 const { getUserTokenInfo } = require('../middleWare/auth.middleWare')
 const { FieldValidation } = require('../ruterExpand/parameter.ruterExpand')
 const { ROLES, CLASS } = require('../../constant/Permissions');
@@ -29,17 +29,17 @@ router.post('/login', FieldValidation({
     user_name: { type: 'string', required: true, allowEmpty: false },
     user_phone: { type: 'string', required: true, allowEmpty: false, format: /^1[3-9]\d{9}$/ },
     password: { type: 'string', required: true, allowEmpty: false, min: 6, max: 6 }
-}), isUserLegal, isPasswordCorrect, login)
+}), isUserLegal, isRoleName, isPasswordCorrect, login)
 
 //修改密码
 /**
- *参数 user_name  password  newPassword
+ *参数 user_phone  password  newPassword
  */
 router.patch('/password', FieldValidation({
     user_phone: { type: 'string', required: true, allowEmpty: false, format: /^1[3-9]\d{9}$/ },
     password: { type: 'string', required: true, allowEmpty: false, min: 6, max: 6 },
     newPassword: { type: 'string', required: true, allowEmpty: false, min: 6, max: 6 }
-}), getUserTokenInfo, isPasswordCorrect, encryptPassword, changPassword)
+}), getUserTokenInfo, isRoleName, isPasswordCorrect, encryptPassword, changPassword)
 
 
 module.exports = router

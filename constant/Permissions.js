@@ -1,3 +1,4 @@
+
 /**
  * 角色常量
  */
@@ -7,19 +8,20 @@ const ROLES = {
     // 如需更多角色，直接在这里添加即可，如 ASSISTANT: 3 等
 };
 
+
 /**
  * 单选多选
  */
 const SINGLE_MULTIPLE = {
-    SINGLE: 0,    // 单选
-    MULTIPLE: 1,   // 多选
-    JUDGE: 2,      // 判断题
+    SINGLE: "单选",    // 单选
+    MULTIPLE: "多选",   // 多选
+    JUDGE: "判断",      // 判断题
 };
 
 /**
  * 应用类型
  */
-const APP_TYPE = ["操作", "考试", "作业"]
+const APP_TYPE = ["操作", "安全", "规范"]
 
 /**
  * 班级
@@ -30,5 +32,5 @@ module.exports = {
     ROLES,
     SINGLE_MULTIPLE,
     APP_TYPE,
-    CLASS
+    CLASS,
 };
