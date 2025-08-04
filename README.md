@@ -288,11 +288,17 @@ topicName: { type: 'string', required: true, min: "1" },
 
 参数：ctx.request.query
 
-pageNum,pageSize
+pageNum,pageSize,applyType,qType
 
-   pageNum: { type: 'string', required: true, min: 1 },
+
+
+​       pageNum: { type: 'string', required: true, min: 1 },
 
 ​        pageSize: { type: 'string', required: true, min: 1 }
+
+​        applyType: { type: 'enum', values: APP_TYPE, required: false },  可选
+
+​        qType: { type: 'enum', values: Object.values(SINGLE_MULTIPLE), required: false },可选
 
 ### 返回形式
 

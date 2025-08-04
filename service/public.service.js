@@ -1,6 +1,7 @@
 
 const { resTime } = require('../tool/Time.Conversion')//引入时间转换工具
-const Teacher = require('../model/teacher.model')//引入老师模型
+const Teacher = require('../model/teacher.model');//引入老师模型
+const { where } = require('sequelize');
 
 class PublicService {
     /**
@@ -136,12 +137,15 @@ class PublicService {
      * pageSize:每页条数
      * exclude:关联模型排除字段  字符串数组
      * model:关联的模型
+     * is:是否配置where条件【fase就是开启默认ture】
+     * whereObj:自定义查询条件【对象】
      * 分页查询
      */
-    async Pub_findAndCountAll({ surface, pageNum, pageSize, exclude = [], model }) {
+    async Pub_findAndCountAll({ surface, pageNum, pageSize, exclude = [], model, is = true, whereObj = {} }) {
         const { rows, count } = await surface.findAndCountAll({
             limit: +pageSize,
             offset: (pageNum - 1) * pageSize,
+            where: is ? {} : whereObj,
             include: [
                 {
                     model: model, // 关联的模型

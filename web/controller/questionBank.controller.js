@@ -138,15 +138,18 @@ class QuestionBankController {
      */
     async list(ctx) {
         //请求参数
-        const { pageNum, pageSize } = ctx.request.query
+        const { pageNum, pageSize, ...whereObj } = ctx.request.query
         try {
-
+            //判断是否带where条件  false 就是添加where条件
+            const is = (Object.keys(whereObj).length <= 0) ? true : false
             const res = await Pub_findAndCountAll({
                 surface: QuestionsBank,
                 pageNum,
                 pageSize,
                 exclude: ['updatedAt', 'createdAt', 'password'],
-                model: Teacher
+                model: Teacher,
+                is,
+                whereObj
             })
 
             ctx.body = {
