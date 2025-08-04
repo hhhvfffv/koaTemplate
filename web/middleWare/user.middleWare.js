@@ -48,10 +48,12 @@ const encryptPassword = async (ctx, next) => {
                 break
         }
 
+        //加密
         const salt = bcrypt.genSaltSync(10);
         const hash = bcrypt.hashSync(password, salt);
         //挂载回去
         ctx.request.body.password = hash;
+
 
     } catch (err) {
         console.error(err);
@@ -124,14 +126,17 @@ const isPasswordCorrect = async (ctx, next) => {
             return
         }
 
-        console.log(User_infomation.password);
-        console.log(password);
-
+        const is = await bcrypt.compareSync(password, User_infomation.password)
 
         //3.解密
-        if (!bcrypt.compareSync(password, User_infomation.password)) {
+        if (!is) {
+            const err = {
+                "源密码:": User_infomation.password,
+                "输入密码:": password,
+                "bcrypt.compareSync验证结果:": is
+            }
+            isPasswordError.data.data = err
             ctx.app.emit('error_s', isPasswordError, ctx)
-            console.log(bcrypt.compareSync(password, User_infomation.password));
             return
         }
     } catch (err) {

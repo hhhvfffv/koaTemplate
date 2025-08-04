@@ -103,8 +103,9 @@ class PublicService {
 
     /**
      * 更新
-     * 更新表内容  创建surface:表实例  WhereOpj：对象 
+     * 更新表内容  创建surface:表实例  WhereOpj：更新内容对象 
      * is:是否精确查询【fase就是开启默认ture】 精确查询对象{[OP.in]:...}
+     * isWhere:自定义查询条件【对象】
      */
     async Pub_update({ surface, id, WhereOpj, is = true, isWhere }) {
         const where = {}
@@ -116,7 +117,6 @@ class PublicService {
             }
         }
 
-
         const res = await surface.update(
             where, //更新内容
             {
@@ -124,7 +124,7 @@ class PublicService {
             }
         )
 
-        return res[0] //返回更新的条数
+        return res //返回更新的条数
 
 
     }

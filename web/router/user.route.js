@@ -1,7 +1,7 @@
 const Router = require('koa-router');
 const { register, login, changPassword } = require('../controller/user.controller')
 const { isUserDuplicate, encryptPassword, isRoleName, isUserLegal, isPasswordCorrect } = require('../middleWare/user.middleWare')
-const { getUserTokenInfo } = require('../middleWare/auth.middleWare')
+const { getUserTokenInfo, UserLimit } = require('../middleWare/auth.middleWare')
 const { FieldValidation } = require('../ruterExpand/parameter.ruterExpand')
 const { ROLES, CLASS } = require('../../constant/Permissions');
 
@@ -39,7 +39,7 @@ router.patch('/password', FieldValidation({
     user_phone: { type: 'string', required: true, allowEmpty: false, format: /^1[3-9]\d{9}$/ },
     password: { type: 'string', required: true, allowEmpty: false, min: 6, max: 6 },
     newPassword: { type: 'string', required: true, allowEmpty: false, min: 6, max: 6 }
-}), getUserTokenInfo, isRoleName, isPasswordCorrect, encryptPassword, changPassword)
+}), getUserTokenInfo, UserLimit, isRoleName, isPasswordCorrect, encryptPassword, changPassword)
 
 
 module.exports = router

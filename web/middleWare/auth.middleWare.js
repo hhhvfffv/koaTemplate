@@ -1,6 +1,6 @@
 const jwt = require('jsonwebtoken')
 const { JOSN_WEB_TOKEN } = require('../../config/config.default')
-const { TokenExpiredError, JsonWebTokenError, NotBeforeError, isAllError, PermissionsError, NOtFoundPermError } = require('../../constant/err.type')
+const { TokenExpiredError, JsonWebTokenError, NotBeforeError, isAllError, isUserError, PermissionsError, NOtFoundPermError } = require('../../constant/err.type')
 const { getUser } = require('../service/user.service')
 const { Pul_findOne } = require('../../service/public.service')
 const User = require('../../model/user.model')
@@ -86,6 +86,20 @@ class AuthMiddleware {
             }
             await next()
         }
+    }
+
+    /**
+     * 1,需要token中间件，读取用户信息ctx.state.user
+     * 2.需要body参数的user_phone
+     */
+    async UserLimit(ctx) {
+        const { user_phone } = ctx.state.user
+        const { user_phone: body_user_phone } = ctx.request.body
+
+        if (user_phone !== body_user_phone) {
+            return ctx.app.emit('error_s', isUserError, ctx)
+        }
+        await next()
     }
 }
 

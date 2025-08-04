@@ -114,21 +114,31 @@ class UserRouteClass {
      */
     async changPassword(ctx, next) {
         // 更改
-        const { id } = ctx.state.user
-        const { password } = ctx.request.body
+        const { password, user_phone } = ctx.request.body
         const { roleName } = ctx.state
 
         try {
+            let res;
             //操作数据库
             //判断是哪个表的
             switch (roleName) {
                 case ROLES.TEACHER: {
-                    await Pub_update({ surface: Teacher, id, WhereOpj: { password } })
+                    res = await Pub_update({ surface: Teacher, is: false, WhereOpj: { password }, isWhere: { user_phone } },)
                     break
                 }
                 case ROLES.STUDENT: {
-                    await Pub_update({ surface: User, id, WhereOpj: { password } })
+                    res = await Pub_update({ surface: User, is: false, WhereOpj: { password }, isWhere: { user_phone } })
                     break
+                }
+            }
+            //返回数据
+            ctx.body = {
+                data: {
+                    code: "0",
+                    success: "修改密码成功",
+                    data: {
+                        res
+                    }
                 }
             }
 
@@ -138,13 +148,7 @@ class UserRouteClass {
             return
         }
 
-        ctx.body = {
-            data: {
-                code: "0",
-                success: "修改密码成功",
-                data: {}
-            }
-        }
+
     }
 }
 

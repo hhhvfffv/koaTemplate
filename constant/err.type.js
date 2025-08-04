@@ -155,5 +155,12 @@ module.exports = {
             message: '获取总数失败',
             data: ''
         }
+    },
+    isUserError: {
+        data: {
+            code: '10022',
+            message: '非本用户操作即将拦截',
+            data: ''
+        }
     }
 }
