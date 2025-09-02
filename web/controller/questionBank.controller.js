@@ -138,7 +138,7 @@ class QuestionBankController {
      */
     async list(ctx) {
         //请求参数
-        const { pageNum, pageSize, ...whereObj } = ctx.request.query
+        const { pageNum, pageSize, ...whereObj } = ctx.request.body
         try {
             //判断是否带where条件  false 就是添加where条件
             const is = (Object.keys(whereObj).length <= 0) ? true : false

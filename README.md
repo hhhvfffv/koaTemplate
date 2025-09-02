@@ -284,21 +284,25 @@ topicName: { type: 'string', required: true, min: "1" },
 
 # /question/list分页查询
 
-## get
+## post
 
-参数：ctx.request.query
+参数：ctx.request.body
 
 pageNum,pageSize,applyType,qType
 
 
 
-​       pageNum: { type: 'string', required: true, min: 1 },
+​         {
 
-​        pageSize: { type: 'string', required: true, min: 1 }
+​        pageNum: { type: 'number', required: true, min: 1 },
 
-​        applyType: { type: 'enum', values: APP_TYPE, required: false },  可选
+​        pageSize: { type: 'number', required: true, min: 1 },
 
-​        qType: { type: 'enum', values: Object.values(SINGLE_MULTIPLE), required: false },可选
+​        applyType: { type: 'enum', values: APP_TYPE, required: false },
+
+​        qType: { type: 'enum', values: Object.values(SINGLE_MULTIPLE), required: false },
+
+​    }
 
 ### 返回形式
 

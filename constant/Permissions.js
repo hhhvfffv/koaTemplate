@@ -28,6 +28,13 @@ const APP_TYPE = ["操作", "安全", "规范"]
  */
 const CLASS = ["一班", "二班", "三班", "四班", "五班", "六班", "七班", "八班", "九班", "十班"];
 
+/**
+ * 任务状态
+ */
+const TASK_STATUS = {
+    Continuing: 0,
+}
+
 module.exports = {
     ROLES,
     SINGLE_MULTIPLE,

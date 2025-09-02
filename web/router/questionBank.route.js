@@ -53,13 +53,13 @@ router.put('/update',
 /**
  * 查询  ：pageNumber, pageSize
  */
-router.get('/list', FieldValidation(
+router.post('/list', FieldValidation(
     {
-        pageNum: { type: 'string', required: true, min: 1 },
-        pageSize: { type: 'string', required: true, min: 1 },
+        pageNum: { type: 'number', required: true, min: 1 },
+        pageSize: { type: 'number', required: true, min: 1 },
         applyType: { type: 'enum', values: APP_TYPE, required: false },
         qType: { type: 'enum', values: Object.values(SINGLE_MULTIPLE), required: false },
-    }, 'query'), getUserTokenInfo, havePermissions(ROLES.TEACHER), list)
+    }), getUserTokenInfo, havePermissions(ROLES.TEACHER), list)
 
 /**
  * 总数
