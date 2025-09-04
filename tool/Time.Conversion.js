@@ -76,9 +76,9 @@ class TimeConversion {
     }
 
     /**
-     * 第一层就必须访问到createAt和updateAt字段
-     * 转换res的时间格式，并返回res东八区
-     * 不能有嵌套可以判断数组
+     * - 第一层就必须访问到createAt和updateAt字段
+     * - 转换res的时间格式，并返回res东八区
+     * - 能有嵌套可以判断数组
      * @param {*} res 
      * @returns 
      */
@@ -92,6 +92,17 @@ class TimeConversion {
                     item.createdAt = timeClass.formatToChinaTime(item.createdAt);
                     item.updatedAt = timeClass.formatToChinaTime(item.updatedAt);
                 }
+
+                // 递归处理子对象
+                for (const key in item) {
+                    if (item.hasOwnProperty(key)) {
+                        const value = item[key];
+                        if (typeof value === 'object' && value !== null) {
+                            handleItem(value);
+                        }
+                    }
+                }
+
                 return item;
             };
 
@@ -111,13 +122,12 @@ class TimeConversion {
 
             // 非对象/数组直接返回
             return res;
+
         } catch (error) {
             console.log(error);
             console.log("数据库返回时转换东八时区时报错");
-
         }
     }
-
 }
 
 module.exports = new TimeConversion();

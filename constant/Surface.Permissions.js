@@ -7,8 +7,8 @@ const Teacher = require('../model/teacher.model')
  * TEACHER:教师  ROLES:2  SURFACE:Teacher
  */
 const ROLES_SURFACE = {
-    STUDENT: { ROLES: 1, SURFACE: User },
-    TEACHER: { ROLES: 2, SURFACE: Teacher },
+    STUDENT: { ROLES: 0, SURFACE: User },
+    TEACHER: { ROLES: 1, SURFACE: Teacher },
 }
 
 module.exports = { ROLES_SURFACE }

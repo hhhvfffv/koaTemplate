@@ -1,4 +1,5 @@
 const QuestionsBank = require('../../model/questionBank.model');
+const { resTime } = require('../../tool/Time.Conversion')
 
 class QuestionBankService {
     /**
@@ -6,7 +7,7 @@ class QuestionBankService {
      */
     async createQuestion(topicName, applyType, qType, create_phone, topicDetail, answer) {
         try {
-            const res = await QuestionsBank.create({
+            let res = await QuestionsBank.create({
                 topicName,
                 applyType,
                 qType,
@@ -14,6 +15,7 @@ class QuestionBankService {
                 topicDetail,
                 answer
             });
+            res = resTime(res)  //时区转换
             return res;
         } catch (error) {
             console.log(error);

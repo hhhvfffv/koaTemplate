@@ -1,26 +1,32 @@
 const { isUserRepeat, userRegisterError, isUserNotExist, isDataSlectError, isPasswordError } = require('../../constant/err.type')
-const { getUser } = require('../service/user.service')
 const { Pul_findOne } = require('../../service/public.service')
 const User = require('../../model/user.model')
 const Teacher = require('../../model/teacher.model')
 const { ROLES } = require('../../constant/Permissions')
+const { ROLES_SURFACE } = require('../../constant/Surface.Permissions')
 const bcrypt = require('bcryptjs')
 
 /**userRegisterError
  * 2.查重->查询用户是否存在
  */
 const isUserDuplicate = async (ctx, next) => {
-    const { user_phone, roleName } = ctx.request.body;
+    const { user_phone } = ctx.request.body;
+    //标记
+    let flag = false
     // 数据库查询用户是否存在
     try {
         // 两个表任意一个存在都不行
-        if ((await Pul_findOne({ surface: Teacher, WhereOpj: { user_phone } }))
-            || (await Pul_findOne({ surface: User, WhereOpj: { user_phone } }))) {
-            ctx.app.emit('error_s', isUserRepeat, ctx)
-            return
+        for (const ROLES in ROLES_SURFACE) {
+            // 检查属性是否是对象自身的属性
+            let res = await Pul_findOne({ surface: ROLES_SURFACE[ROLES].SURFACE, WhereOpj: { user_phone } })
+            //如果存在就标记真值，已经注册过了
+            if (res) {
+                flag = true
+                return ctx.app.emit('error_s', isUserRepeat, ctx)
+            }
         }
-    } catch (err) {
-        console.error(err);
+    } catch (error) {
+        console.log(error);
         ctx.app.emit('error_s', userRegisterError, ctx)
         return
     }
@@ -71,16 +77,21 @@ const encryptPassword = async (ctx, next) => {
 const isUserLegal = async (ctx, next) => {
     //1.获得数据
     const { user_phone } = ctx.request.body;
+    //标记
+    let flag = false
     //2.查找用户是否存在
     try {
-        let res
-        let res1 = await Pul_findOne({ surface: Teacher, WhereOpj: { user_phone } })
-        let res2 = await Pul_findOne({ surface: User, WhereOpj: { user_phone } })
+        // 两个表任意一个存在都不行
+        for (const ROLES in ROLES_SURFACE) {
+            let res = await Pul_findOne({ surface: ROLES_SURFACE[ROLES].SURFACE, WhereOpj: { user_phone } })
+            //如果存在就标记真值，已经注册过了 可登录
+            if (res) {
+                flag = true
+            }
+        }
 
-
-        res1 ? res = res1 : res = res2
-
-        if (!res) {
+        //若循环后还是没有标记，说明用户不存在
+        if (!flag) {
             ctx.app.emit('error_s', isUserNotExist, ctx)
             return
         }
@@ -109,16 +120,11 @@ const isPasswordCorrect = async (ctx, next) => {
         //2.获得数据库用户信息  
         let User_infomation
 
-        //判断是哪个表的
-        switch (roleName) {
-            case ROLES.TEACHER: {
-                User_infomation = await Pul_findOne({ surface: Teacher, WhereOpj: { user_phone } })
-                break
-            }
-            case ROLES.STUDENT: {
-                User_infomation = await Pul_findOne({ surface: User, WhereOpj: { user_phone } })
-                break
-            }
+        // 检查他们的权限
+        for (const ROLES in ROLES_SURFACE) {
+            let yes = ROLES_SURFACE[ROLES].ROLES === roleName
+                && (User_infomation = await Pul_findOne({ surface: ROLES_SURFACE[ROLES].SURFACE, WhereOpj: { user_phone } }))
+            if (yes) break//找到就跳出
         }
 
         if (!User_infomation) {
@@ -157,15 +163,18 @@ const isPasswordCorrect = async (ctx, next) => {
  * @returns 
  */
 const isRoleName = async (ctx, next) => {
+
     const { user_phone } = ctx.request.body;
-
     try {
-        let res1 = await Pul_findOne({ surface: Teacher, WhereOpj: { user_phone } })
-        let res2 = await Pul_findOne({ surface: User, WhereOpj: { user_phone } })
-
-        res1 ? ctx.state.roleName = ROLES.TEACHER : ""
-        res2 ? ctx.state.roleName = ROLES.STUDENT : ""
-        await next()
+        // 检查他们的权限
+        for (const ROLES in ROLES_SURFACE) {
+            let res = await Pul_findOne({ surface: ROLES_SURFACE[ROLES].SURFACE, WhereOpj: { user_phone } })
+            //如果存在就标记真值， 那就记录角色
+            if (res) {
+                ctx.state.roleName = ROLES_SURFACE[ROLES].ROLES
+                return await next() // 找到就返回 前面判断过不会有多表存在的情况，除非改了数据库
+            }
+        }
     } catch (error) {
         console.error(err);
         ctx.app.emit('error_s', isDataSlectError, ctx)

@@ -1,11 +1,9 @@
 const jwt = require('jsonwebtoken')
 const { isDataSlectError } = require('../../constant/err.type')
 const { JOSN_WEB_TOKEN, JOSN_DATA } = require('../../config/config.default')
-const { getUser, updateUser } = require('../service/user.service')
 const { ROLES } = require('../../constant/Permissions')
+const { ROLES_SURFACE } = require('../../constant/Surface.Permissions')
 const { Pub_create, Pul_findOne, Pub_update } = require('../../service/public.service')
-const User = require('../../model/user.model')
-const Teacher = require('../../model/teacher.model')
 
 class UserRouteClass {
 
@@ -19,22 +17,12 @@ class UserRouteClass {
         let res
         const { user_name, password, user_phone, class_name, roleName = ROLES.STUDENT } = ctx.request.body
         try {
-            switch (roleName) {
-                case ROLES.TEACHER: {
-                    res = await Pub_create({
-                        surface: Teacher,
-                        WhereOpj: { user_name, user_phone, password, class_name, roleName }
-                    })
+            //判断是哪个表的
+            for (const ROLES in ROLES_SURFACE) {
+                if (roleName == ROLES_SURFACE[ROLES].ROLES) {
+                    res = await Pub_create({ surface: ROLES_SURFACE[ROLES].SURFACE, WhereOpj: { user_name, user_phone, password, class_name, roleName } })
                     break
                 }
-                case ROLES.STUDENT: {
-                    res = await Pub_create({
-                        surface: User,
-                        WhereOpj: { user_name, user_phone, password, class_name, roleName }
-                    })
-                    break
-                }
-
             }
             ctx.body = {
                 data: {
@@ -43,8 +31,8 @@ class UserRouteClass {
                     data: res
                 }
             }
-
-        } catch (e) {
+        } catch (error) {
+            console.log(error);
             console.error("操作数据库错误");
             return
         }
@@ -67,22 +55,15 @@ class UserRouteClass {
             let res;
 
             //判断是哪个表的
-            switch (roleName) {
-                case ROLES.TEACHER: {
-                    let { password, createdAt, updatedAt, ...data } = await Pul_findOne({ surface: Teacher, WhereOpj: { user_phone } })
+            for (const ROLES in ROLES_SURFACE) {
+                if (ROLES_SURFACE[ROLES].ROLES === roleName) {
+                    let { password, createdAt, updatedAt, ...data } = await Pul_findOne({ surface: ROLES_SURFACE[ROLES].SURFACE, WhereOpj: { user_phone } })
                     res = data
                     console.log("用户信息：", res);
-
-                    break
-                }
-                case ROLES.STUDENT: {
-                    let { password, createdAt, updatedAt, ...data } = await Pul_findOne({ surface: User, WhereOpj: { user_phone } })
-                    res = data
-                    console.log("用户信息：", res);
-
                     break
                 }
             }
+
 
             token = jwt.sign(res, JOSN_WEB_TOKEN, { expiresIn: JOSN_DATA })
             //返回数据
@@ -121,16 +102,14 @@ class UserRouteClass {
             let res;
             //操作数据库
             //判断是哪个表的
-            switch (roleName) {
-                case ROLES.TEACHER: {
-                    res = await Pub_update({ surface: Teacher, is: false, WhereOpj: { password }, isWhere: { user_phone } },)
-                    break
-                }
-                case ROLES.STUDENT: {
-                    res = await Pub_update({ surface: User, is: false, WhereOpj: { password }, isWhere: { user_phone } })
-                    break
+            for (const ROLES in ROLES_SURFACE) {
+                if (ROLES_SURFACE[ROLES].ROLES === roleName) {//找到对应的表
+                    res = await Pub_update({ surface: ROLES_SURFACE[ROLES].SURFACE, is: false, WhereOpj: { password }, isWhere: { user_phone } })
+                    break//退出循环,找到就行
                 }
             }
+
+
             //返回数据
             ctx.body = {
                 data: {

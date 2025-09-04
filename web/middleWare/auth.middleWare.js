@@ -92,7 +92,7 @@ class AuthMiddleware {
      * 1,需要token中间件，读取用户信息ctx.state.user
      * 2.需要body参数的user_phone
      */
-    async UserLimit(ctx) {
+    async UserLimit(ctx, next) {
         const { user_phone } = ctx.state.user
         const { user_phone: body_user_phone } = ctx.request.body
 

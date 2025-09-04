@@ -4,6 +4,10 @@ const dotenv = require('../..//config/config.default');//利用npm install doten
 const { isExtnameERROR } = require('../../constant/err.type')
 
 class UploadController {
+    /**
+     * 上传文件和回显
+     * @param {*} ctx 
+     */
     async upload(ctx) {
         /**
          * 1.获取上传文件
@@ -33,7 +37,8 @@ class UploadController {
     }
 
     /**
-     * 
+     * 解析word文件
+     * 用于返回
      */
     async parse(ctx) {
         const file = ctx.request.files.file.newFilename
